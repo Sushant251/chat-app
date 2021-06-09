@@ -1,12 +1,12 @@
 const users = []
 
-const addUser = ({ id, username, room }) => {
+const addUser = ({ id, username, room, password }) => {
     // Clean the data
     username = username.trim().toLowerCase()
     room = room.trim().toLowerCase()
 
     // Validate the data
-    if (!username || !room) {
+    if (!username || !room || !password) {
         return {
             error: 'Username and room are required!'
         }
@@ -19,15 +19,42 @@ const addUser = ({ id, username, room }) => {
 
     // Validate username
     if (existingUser) {
+        return{
+            error: 'user name exist'
+        }
+    
+    }
+    const pass = users.find((user) => {
+        return user.room === room && user.password===password
+    })
+    if(pass){
+        console.log("passwod matches")
+        const user = { id, username, room, password }
+        users.push(user)
+        
+        return { user }
+        
+        
+    }
+    const roomval = users.find((user) => {
+        return user.room === room 
+    })
+    if(!pass&&roomval){
         return {
-            error: 'Username is in use!'
+            error:'password not matches'
         }
     }
-
-    // Store user
-    const user = { id, username, room }
+   
+    const user = { id, username, room, password }
     users.push(user)
+    
     return { user }
+    
+    
+    
+    // Store user
+    
+    
 }
 
 const removeUser = (id) => {
